@@ -22,7 +22,7 @@ List all npm-scripts with (basically the same as `npm run`)
 
     npms
 
-List a npm-script with
+List npm-script `foo` with
 
     npms foo
 
@@ -39,3 +39,7 @@ The latter creates an entry in `package.json` like this:
       }
       ...
     }
+
+Remove npm-script `foo` with
+
+    npms foo

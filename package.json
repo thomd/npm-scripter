@@ -4,9 +4,16 @@
   "description": "A simple `npm` helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json files is terrible.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -w"
   },
-  "keywords": ["npm", "script", "json"],
+  "keywords": [
+    "npm",
+    "script",
+    "json"
+  ],
   "author": "Thomas Duerr <thomduerr@gmail.com> (http://git.io/thomd)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jsonfile": "^3.0.0"
+  }
 }
