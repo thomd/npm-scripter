@@ -16,25 +16,17 @@ describe('npm-scripter', function() {
     }
   }
 
-  before(function(done) {
+  beforeEach(function(done) {
     TEST_DIR = path.join(os.tmpdir(), 'npm-scripter-tests')
     rimraf.sync(TEST_DIR)
-    fs.mkdir(TEST_DIR, done)
-  })
-
-  after(function(done) {
-    //rimraf.sync(TEST_DIR)
-    done()
-  })
-
-  beforeEach(function(done) {
-    TEST_FILE = path.join(TEST_DIR, 'package.json')
-    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
-    done()
+    fs.mkdir(TEST_DIR, function() {
+      TEST_FILE = path.join(TEST_DIR, 'package.json')
+      done()
+    })
   })
 
   afterEach(function(done) {
-    //rimraf.sync(TEST_FILE)
+    rimraf.sync(TEST_DIR)
     done()
   })
 
@@ -43,11 +35,13 @@ describe('npm-scripter', function() {
   })
 
   it('should find all npm scripts', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
     var scripts = scripter.list(TEST_FILE)
     assert.equal(Object.keys(scripts).length, 3)
   })
 
   it('should find npm script "foo"', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
     var script = scripter.list(TEST_FILE, 'foo')
     assert.equal(script, "npm run bar && npm run baz")
   })
@@ -57,6 +51,7 @@ describe('npm-scripter', function() {
   })
 
   it('should add an additional npm script "test"', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
     scripter.add(TEST_FILE, 'test', 'echo test')
     var scripts = scripter.list(TEST_FILE)
     assert.equal(Object.keys(scripts).length, 4)
@@ -65,6 +60,7 @@ describe('npm-scripter', function() {
   })
 
   it('should remove an existing npm script', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
     scripter.remove(TEST_FILE, 'foo')
     var scripts = scripter.list(TEST_FILE)
     assert.equal(Object.keys(scripts).length, 2)
