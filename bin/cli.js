@@ -2,7 +2,7 @@
 
 var cli = require('nash')()
 var editor = require('editor')
-
+var scripter = require('../lib/scripter')
 
 cli.default().handler(function(data, flags, done) {
 
@@ -37,6 +37,7 @@ cli.default().handler(function(data, flags, done) {
       console.log(`add task "${task}" to: "${data.join(' ')}"`)
     }
   }
+
   done()
 })
 
