@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 var cli = require('nash')()
+var editor = require('editor')
+
 
 cli.default().handler(function(data, flags, done) {
 
@@ -18,6 +20,10 @@ cli.default().handler(function(data, flags, done) {
       console.log(`delete task "${task}"`)
     } else if(flags.e) {
       console.log(`edit task "${task}"`)
+      editor('tempfile', function(code, sig) {
+        console.log(`code is: "${code}"`)
+        console.log(`sig is: "${sig}"`)
+      })
     } else {
       console.log(`list task "${task}"`)
     }
