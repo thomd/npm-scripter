@@ -5,7 +5,7 @@
   "main": "./lib/scripter.js",
   "bin": "./bin/cli.js",
   "scripts": {
-    "test": "mocha -w"
+    "test": "mocha"
   },
   "keywords": [
     "npm",
