@@ -2,6 +2,8 @@
 
 var cli = require('nash')()
 var editor = require('editor')
+var tempfile = require('tempfile')
+var fs = require('fs')
 var scripter = require('../lib/scripter')
 
 var PKG = 'package.json'
@@ -24,11 +26,10 @@ cli.default().handler(function(data, flags, done) {
       scripter.remove(PKG, task)
       console.log(`deleted task "${task}"`)
     } else if(flags.e) {
-      // TODO
-      console.log(`edit task "${task}"`)
-      editor('tempfile', function(code, sig) {
-        console.log(`code is: "${code}"`)
-        console.log(`sig is: "${sig}"`)
+      var tmpfile = tempfile()
+      editor(tmpfile, function(code) {
+        code === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile))
+        console.log(`added task "${task}"`)
       })
     } else {
       var scripts = scripter.list(PKG, task)

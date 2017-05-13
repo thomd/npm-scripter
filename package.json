@@ -18,7 +18,8 @@
   "dependencies": {
     "editor": "^1.0.0",
     "jsonfile": "^3.0.0",
-    "nash": "^2.0.4"
+    "nash": "^2.0.4",
+    "tempfile": "^2.0.0"
   },
   "devDependencies": {
     "mocha": "^3.3.0",
