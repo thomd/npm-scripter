@@ -87,4 +87,11 @@ describe('npm-scripter', function() {
     var scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 0)
   })
+
+  it('should remove all npm scripts', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    scripter.remove(TEST_FILE)
+    var scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 0)
+  })
 })
