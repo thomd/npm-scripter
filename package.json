@@ -1,7 +1,7 @@
 {
   "name": "npm-scripter",
   "version": "0.0.1",
-  "description": "A simple `npm` helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json files is terrible.",
+  "description": "A simple npm helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json files is terrible.",
   "main": "index.js",
   "scripts": {
     "test": "mocha -w"
@@ -9,7 +9,8 @@
   "keywords": [
     "npm",
     "script",
-    "json"
+    "json",
+    "cli"
   ],
   "author": "Thomas Duerr <thomduerr@gmail.com> (http://git.io/thomd)",
   "license": "MIT",
