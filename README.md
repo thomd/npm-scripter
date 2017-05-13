@@ -12,10 +12,6 @@ Get help with
 
     npm-scripter -h
 
-or
-
-    man npm-scripter
-
 ## Usage
 
 List all npm-scripts with (basically the same as `npm run`)
@@ -40,6 +36,14 @@ The latter creates an entry in `package.json` like this:
       ...
     }
 
-Remove npm-script `foo` with
+Edit a npm-script (only the code part) in `$EDITOR` with
 
-    npms foo
+    npms foo -e
+
+Delete npm-script `foo` with
+
+    npms foo -d
+
+Delete all npm-scripts with
+
+    npms -d
