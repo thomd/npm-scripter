@@ -15,5 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "jsonfile": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "rimraf": "^2.6.1"
   }
 }
