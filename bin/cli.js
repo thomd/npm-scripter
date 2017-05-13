@@ -11,7 +11,10 @@ var PKG = 'package.json'
 cli.default().handler(function(data, flags, done) {
 
   if(data.length == 0) {
-    if(flags.d) {
+    if(flags.h) {
+      // TODO
+      console.log(`TODO: help`)
+    } else if(flags.d) {
       scripter.remove(PKG)
       console.log('deleted all npm-scripts')
     } else {
@@ -28,8 +31,9 @@ cli.default().handler(function(data, flags, done) {
     } else if(flags.e) {
       var tmpfile = tempfile()
       editor(tmpfile, function(code) {
-        code === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile))
+        code === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
         console.log(`added task "${task}"`)
+        // TODO delete file
       })
     } else {
       var scripts = scripter.list(PKG, task)
@@ -40,8 +44,8 @@ cli.default().handler(function(data, flags, done) {
   if(data.length == 2) {
     var task = data.shift()
     if(flags.e) {
-      // TODO
-      console.log(`edit task "${task}"`)
+      // TODO implement
+      console.log(`TODO: added task "${task}"`)
     } else {
       scripter.add(PKG, task, 'echo test')
       console.log(`added task "${task}"`)
