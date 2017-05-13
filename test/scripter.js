@@ -56,6 +56,12 @@ describe('npm-scripter', function() {
     assert.equal(scripts[0].code, "npm run bar && npm run baz")
   })
 
+  it('should not find npm script "xyz"', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    var scripts = scripter.list(TEST_FILE, 'xyz')
+    assert.equal(scripts.length, 0)
+  })
+
   it('should add a first npm script "test"', function() {
     fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG_EMPTY))
     scripter.add(TEST_FILE, 'test', 'echo test')
@@ -71,6 +77,15 @@ describe('npm-scripter', function() {
     var scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 4)
     assert.deepEqual(scripts.map(script => script.name), ["foo", "bar", "baz", "test"])
+  })
+
+  it('should overwrite an existing npm script "foo"', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    scripter.add(TEST_FILE, 'foo', 'echo foo')
+    var scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 3)
+    assert.deepEqual(scripts.map(script => script.name), ["foo", "bar", "baz"])
+    assert.equal(scripts.filter(script => script.name === "foo").shift().code, "echo foo")
   })
 
   it('should remove an existing npm script', function() {
