@@ -2,12 +2,16 @@
 
 [![Build Status](https://travis-ci.org/thomd/npm-scripter.png)](https://travis-ci.org/thomd/npm-scripter)
 
-A simple `npm` helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json
-files is terrible.
+A simple `npm` helper for the command-line to manage npm-scripts.
+
+> It's for the lazy programmer because editing json files is terrible.
 
 ## Install
 
     npm install -g npm-scripter
+
+Create a bash alias if you like with
+
     alias npms='npm-scripter $@'
 
 Get help with
