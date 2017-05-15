@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
 var cli = require('commander')
-var chalk = require('chalk')
 var fs = require('fs')
 var editor = require('editor')
 var tempfile = require('tempfile')
 var scripter = require('../lib/scripter')
-var symbol = require('../lib/symbols')
+var logger = require('../lib/logger')
 var pkg = require('../package.json')
 
 var PKG = 'package.json'
@@ -25,7 +24,7 @@ cli
       // npm-scripter task -d
       if(cli.delete) {
         scripter.remove(PKG, task)
-        console.log(chalk.gray(`\n  ${chalk.red(symbol.del)} deleted npm-script ${chalk.underline(task)}`))
+        logger.deleted(task)
         return
       }
 
@@ -38,17 +37,17 @@ cli
         }
         editor(tmpfile, function(ret) {
           ret === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
-          console.log(chalk.gray(`\n  ${chalk.green(symbol.add)} added npm-script ${chalk.underline(task)}`))
+          logger.added(task)
         })
         return
       }
 
       // npm-scripter task
       var scripts = scripter.list(PKG, task)
-      if(scripts.length == 0) {
-        console.log(chalk.gray(`\n  npm-script ${chalk.underline(task)} not found`))
+      if(scripts.length === 0) {
+        logger.notFound(task)
       } else {
-        scripts.forEach(script => console.log(`\n  ${chalk.underline(script.name)}: ${script.code}`))
+        scripts.forEach(logger.listScript)
       }
 
     } else {
@@ -59,13 +58,14 @@ cli
         fs.writeFileSync(tmpfile, code)
         editor(tmpfile, function(ret) {
           ret === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
-          console.log(chalk.gray(`\n  ${chalk.green(symbol.add)} added npm-script ${chalk.underline(task)}`))
+          logger.added(task)
         })
+        return
       }
 
       // npm-scripter task command
       scripter.add(PKG, task, code)
-      console.log(chalk.gray(`\n  ${chalk.green(symbol.add)} added npm-script ${chalk.underline(task)}`))
+      logger.added(task)
     }
   })
 
@@ -77,9 +77,17 @@ cli.on('--help', () => {
 
       > npm-scripter
 
-    create npm-scritp 'foo':
+    create npm-script 'foo':
 
       > npm-scripter foo 'echo -n "foobar"'
+
+    create npm-script 'foo' in $EDITOR:
+
+      > npm-scripter foo -e
+
+    delete npm-script 'foo':
+
+      > npm-scripter foo -d
 `
   console.log(examples)
 })
@@ -90,15 +98,14 @@ if(!action) {
   if(cli.delete) {
     // npm-scripter -d
     scripter.remove(PKG)
-    console.log(chalk.gray(`\n  ${chalk.red(symbol.del)} deleted all npm-scripts`))
+    logger.deleted()
   } else {
     // npm-scripter
     var scripts = scripter.list(PKG)
-    if(scripts.length == 0) {
-      console.log(chalk.gray(`\n  ${chalk.red(symbol.del)} no npm-scripts`))
+    if(scripts.length === 0) {
+      logger.notFound()
     } else {
-      console.log('')
-      scripts.forEach(script => console.log(`  ${chalk.underline(script.name)}: ${script.code}`))
+      scripts.forEach(logger.listScript)
     }
   }
 }
