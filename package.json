@@ -20,7 +20,6 @@
     "commander": "^2.9.0",
     "editor": "^1.0.0",
     "jsonfile": "^3.0.0",
-    "nash": "^2.0.4",
     "tempfile": "^2.0.0",
     "trim": "0.0.1"
   },
