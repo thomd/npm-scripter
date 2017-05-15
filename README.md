@@ -8,48 +8,70 @@ A simple `npm` helper for the command-line to manage npm-scripts.
 
 ## Install
 
-    npm install -g npm-scripter
+```shell
+npm install -g npm-scripter
+```
 
 Create a bash alias if you like with
 
-    alias npms='npm-scripter $@'
+```shell
+alias nps='npm-scripter $@'
+```
 
 Get help with
 
-    npm-scripter -h
+```shell
+nps -h
+```
 
 ## Usage
 
 List all npm-scripts with (basically the same as `npm run`)
 
-    npms
+```shell
+nps
+```
 
 List npm-script `foo` with
 
-    npms foo
+```shell
+nps foo
+```
 
 Create a npm-script with
 
-    npms foo 'echo "bar"'
+```shell
+nps foo 'echo "bar"'
+```
 
 The latter creates an entry in `package.json` like this:
 
-    {
-      ...
-      "scripts": {
-        "foo": "echo \"bar\""
-      }
-      ...
-    }
+```javascript
+{
+  // ...
+  "scripts": {
+    "foo": "echo \"bar\""
+  }
+  // ...
+}
+```
 
 Edit a npm-script (only the code part) in `$EDITOR` with
 
-    npms foo -e
+```shell
+nps foo -e
+```
 
 Delete npm-script `foo` with
 
-    npms foo -d
+```shell
+nps foo -d
+```
+
 
 Delete all npm-scripts with
 
-    npms -d
+```shell
+nps -d
+```
+
