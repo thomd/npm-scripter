@@ -2,7 +2,7 @@
   "name": "npm-scripter",
   "version": "0.0.1",
   "description": "A simple npm helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json files is terrible.",
-  "main": "./lib/scripter.js",
+  "main": "index.js",
   "bin": "./bin/npm-scripter.js",
   "scripts": {
     "test": "mocha"
