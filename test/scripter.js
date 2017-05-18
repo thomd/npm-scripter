@@ -35,6 +35,17 @@ describe('npm-scripter', function() {
     done()
   })
 
+  it('should inform correctly if package.json does exist', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    var missing = scripter.missing(TEST_FILE)
+    assert.equal(missing, false)
+  })
+
+  it('should inform correctly if package.json does not missing', function() {
+    var missing = scripter.missing(TEST_FILE)
+    assert.equal(missing, true)
+  })
+
   it('should find no npm scripts if no scripts are defined', function() {
     fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG_EMPTY))
     var scripts = scripter.list(TEST_FILE)

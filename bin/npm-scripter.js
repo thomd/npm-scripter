@@ -8,7 +8,13 @@ var scripter = require('../lib/scripter')
 var logger = require('../lib/logger')
 var pkg = require('../package.json')
 
-var PKG = 'package.json'
+var PKG = './package.json'
+
+if(scripter.missing(PKG)) {
+  logger.noPkgFound(PKG)
+  return
+}
+
 var action = false
 
 cli
