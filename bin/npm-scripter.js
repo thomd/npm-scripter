@@ -21,14 +21,13 @@ cli
 
     if(!code) {
 
-      // npm-scripter task -d
+      // ----- npm-scripter task -d ---------------------------------------------------------------
       if(cli.delete) {
-        scripter.remove(PKG, task)
-        logger.deleted(task)
+        scripter.remove(PKG, task) ? logger.deleted(task) : logger.notFound(task)
         return
       }
 
-      // npm-scripter task -e
+      // ----- npm-scripter task -e ---------------------------------------------------------------
       if(cli.edit) {
         var tmpfile = tempfile()
         var script = scripter.list(PKG, task).shift()
@@ -42,7 +41,7 @@ cli
         return
       }
 
-      // npm-scripter task
+      // ----- npm-scripter task ------------------------------------------------------------------
       var scripts = scripter.list(PKG, task)
       if(scripts.length === 0) {
         logger.notFound(task)
@@ -52,7 +51,7 @@ cli
 
     } else {
 
-      // npm-scripter task command -e
+      // ----- npm-scripter task command -e -------------------------------------------------------
       if(cli.edit) {
         var tmpfile = tempfile()
         fs.writeFileSync(tmpfile, code)
@@ -63,7 +62,7 @@ cli
         return
       }
 
-      // npm-scripter task command
+      // ----- npm-scripter task command ----------------------------------------------------------
       scripter.add(PKG, task, code)
       logger.added(task)
     }
@@ -96,11 +95,12 @@ cli.parse(process.argv)
 
 if(!action) {
   if(cli.delete) {
-    // npm-scripter -d
-    scripter.remove(PKG)
-    logger.deleted()
+
+    // ----- npm-scripter -d ----------------------------------------------------------------------
+    scripter.remove(PKG) ? logger.deleted() : logger.notFound()
   } else {
-    // npm-scripter
+
+    // ----- npm-scripter -------------------------------------------------------------------------
     var scripts = scripter.list(PKG)
     if(scripts.length === 0) {
       logger.notFound()

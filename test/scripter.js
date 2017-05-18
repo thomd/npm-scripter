@@ -90,7 +90,8 @@ describe('npm-scripter', function() {
 
   it('should remove an existing npm script', function() {
     fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
-    scripter.remove(TEST_FILE, 'bar')
+    var success = scripter.remove(TEST_FILE, 'bar')
+    assert.equal(success, true)
     var scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 2)
     assert.deepEqual(scripts.map(script => script.name), ["foo", "baz"])
@@ -98,14 +99,24 @@ describe('npm-scripter', function() {
 
   it('should not remove a npm script if no scripts are defined', function() {
     fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG_EMPTY))
-    scripter.remove(TEST_FILE, 'bar')
+    var success = scripter.remove(TEST_FILE, 'bar')
+    assert.equal(success, false)
+    var scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 0)
+  })
+
+  it('should not remove all npm scripts if no scripts are defined', function() {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG_EMPTY))
+    var success = scripter.remove(TEST_FILE)
+    assert.equal(success, false)
     var scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 0)
   })
 
   it('should remove all npm scripts', function() {
     fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
-    scripter.remove(TEST_FILE)
+    var success = scripter.remove(TEST_FILE)
+    assert.equal(success, true)
     var scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 0)
   })
