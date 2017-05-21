@@ -8,7 +8,7 @@ var scripter = require('../lib/scripter')
 var logger = require('../lib/logger')
 var pkg = require('../package.json')
 
-var PKG = './package.json'
+var PKG = 'package.json'
 
 if(scripter.missing(PKG)) {
   logger.noPkgFound(PKG)
@@ -49,11 +49,7 @@ cli
 
       // ----- npm-scripter task ------------------------------------------------------------------
       var scripts = scripter.list(PKG, task)
-      if(scripts.length === 0) {
-        logger.notFound(task)
-      } else {
-        scripts.forEach(logger.listScript)
-      }
+      scripts.length === 0 ? logger.notFound(task) : logger.list(scripts)
 
     } else {
 
@@ -108,11 +104,7 @@ if(!action) {
 
     // ----- npm-scripter -------------------------------------------------------------------------
     var scripts = scripter.list(PKG)
-    if(scripts.length === 0) {
-      logger.notFound()
-    } else {
-      scripts.forEach(logger.listScript)
-    }
+    scripts.length === 0 ? logger.notFound() : logger.list(scripts)
   }
 }
 
