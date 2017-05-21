@@ -4,6 +4,7 @@ var cli = require('commander')
 var fs = require('fs')
 var editor = require('editor')
 var tempfile = require('tempfile')
+var chalk = require('chalk')
 var scripter = require('../lib/scripter')
 var logger = require('../lib/logger')
 var pkg = require('../package.json')
@@ -20,7 +21,7 @@ var action = false
 cli
   .version(pkg.version)
   .option('-d, --delete', 'delete npm-script')
-  .option('-e, --edit', `edit npm-script in ${process.env.EDITOR} (the code part)`)
+  .option('-e, --edit', `edit npm-script (the commands part) in ${process.env.EDITOR || '$EDITOR'}`)
   .arguments('[task] [code]')
   .action((task, code) => {
     action = true
@@ -71,6 +72,9 @@ cli
   })
 
 cli.on('--help', () => {
+  if(!process.env.EDITOR) {
+    console.log(`\n  ${chalk.red('EDITOR environment variable is not set!')}`)
+  }
   var examples = `
   Examples:
 
