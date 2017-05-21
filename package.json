@@ -2,7 +2,7 @@
   "name": "npm-scripter",
   "description": "A simple npm helper for the command-line to manage npm-scripts. It's for the lazy programmer because editing json files is terrible.",
   "homepage": "https://github.com/thomd/npm-scripter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "index.js",
   "bin": {
     "npm-scripter": "./bin/npm-scripter.js"
