@@ -50,7 +50,7 @@ cli
 
       // ----- npm-scripter task ------------------------------------------------------------------
       var scripts = scripter.list(PKG, task)
-      scripts.length === 0 ? logger.notFound(task) : logger.list(scripts)
+      scripts.length === 0 ? logger.notFound(task) : logger.list(scripts, false)
 
     } else {
 
@@ -108,7 +108,7 @@ if(!action) {
 
     // ----- npm-scripter -------------------------------------------------------------------------
     var scripts = scripter.list(PKG)
-    scripts.length === 0 ? logger.notFound() : logger.list(scripts)
+    scripts.length === 0 ? logger.notFound() : logger.list(scripts, true)
   }
 }
 
