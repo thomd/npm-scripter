@@ -36,10 +36,19 @@
   },
   "devDependencies": {
     "mocha": "^3.3.0",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "xo": "^0.18.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "xo && mocha"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "envs": [
+      "node",
+      "mocha"
+    ]
+  }
 }

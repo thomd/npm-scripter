@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-var cli = require('commander')
-var fs = require('fs')
-var editor = require('editor')
-var tempfile = require('tempfile')
-var chalk = require('chalk')
-var scripter = require('../lib/scripter')
-var logger = require('../lib/logger')
-var pkg = require('../package.json')
+const fs = require('fs')
+const cli = require('commander')
+const editor = require('editor')
+const tempfile = require('tempfile')
+const chalk = require('chalk')
+const scripter = require('../lib/scripter')
+const logger = require('../lib/logger')
+const pkg = require('../package.json')
 
-var PKG = 'package.json'
+const PKG = 'package.json'
 
-if(scripter.missing(PKG)) {
+if (scripter.missing(PKG)) {
   logger.noPkgFound(PKG)
-  return
+  process.exit(-1)
 }
 
-var action = false
+let action = false
 
 cli
   .version(pkg.version)
@@ -26,40 +26,16 @@ cli
   .action((task, code) => {
     action = true
 
-    if(!code) {
-
-      // ----- npm-scripter task -d ---------------------------------------------------------------
-      if(cli.delete) {
-        scripter.remove(PKG, task) ? logger.deleted(task) : logger.notFound(task)
-        return
-      }
-
-      // ----- npm-scripter task -e ---------------------------------------------------------------
-      if(cli.edit) {
-        var tmpfile = tempfile()
-        var script = scripter.list(PKG, task).shift()
-        if(script) {
-          fs.writeFileSync(tmpfile, script.code)
-        }
-        editor(tmpfile, function(ret) {
-          ret === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
-          logger.added(task)
-        })
-        return
-      }
-
-      // ----- npm-scripter task ------------------------------------------------------------------
-      var scripts = scripter.list(PKG, task)
-      scripts.length === 0 ? logger.notFound(task) : logger.list(scripts, false)
-
-    } else {
-
+    if (code) {
+      //
       // ----- npm-scripter task command -e -------------------------------------------------------
-      if(cli.edit) {
-        var tmpfile = tempfile()
+      if (cli.edit) {
+        const tmpfile = tempfile()
         fs.writeFileSync(tmpfile, code)
-        editor(tmpfile, function(ret) {
-          ret === 0 && scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
+        editor(tmpfile, ret => {
+          if (ret === 0) {
+            scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
+          }
           logger.added(task)
         })
         return
@@ -68,14 +44,48 @@ cli
       // ----- npm-scripter task command ----------------------------------------------------------
       scripter.add(PKG, task, code)
       logger.added(task)
+    } else {
+      // ----- npm-scripter task -d ---------------------------------------------------------------
+      if (cli.delete) {
+        if (scripter.remove(PKG, task)) {
+          logger.deleted(task)
+        } else {
+          logger.notFound(task)
+        }
+        return
+      }
+
+      // ----- npm-scripter task -e ---------------------------------------------------------------
+      if (cli.edit) {
+        const tmpfile = tempfile()
+        const script = scripter.list(PKG, task).shift()
+        if (script) {
+          fs.writeFileSync(tmpfile, script.code)
+        }
+        editor(tmpfile, ret => {
+          if (ret === 0) {
+            scripter.add(PKG, task, fs.readFileSync(tmpfile, 'utf-8'))
+          }
+          logger.added(task)
+        })
+        return
+      }
+
+      // ----- npm-scripter task ------------------------------------------------------------------
+      const scripts = scripter.list(PKG, task)
+      if (scripts.length === 0) {
+        logger.notFound(task)
+      } else {
+        logger.list(scripts, false)
+      }
     }
   })
 
 cli.on('--help', () => {
-  if(!process.env.EDITOR) {
+  if (!process.env.EDITOR) {
     console.log(`\n  ${chalk.red('EDITOR environment variable is not set!')}`)
   }
-  var examples = `
+  const examples = `
   Examples:
 
     list all npm-scritps:
@@ -99,16 +109,22 @@ cli.on('--help', () => {
 
 cli.parse(process.argv)
 
-if(!action) {
-  if(cli.delete) {
-
+if (!action) {
+  if (cli.delete) {
     // ----- npm-scripter -d ----------------------------------------------------------------------
-    scripter.remove(PKG) ? logger.deleted() : logger.notFound()
+    if (scripter.remove(PKG)) {
+      logger.deleted()
+    } else {
+      logger.notFound()
+    }
   } else {
-
     // ----- npm-scripter -------------------------------------------------------------------------
-    var scripts = scripter.list(PKG)
-    scripts.length === 0 ? logger.notFound() : logger.list(scripts, true)
+    const scripts = scripter.list(PKG)
+    if (scripts.length === 0) {
+      logger.notFound()
+    } else {
+      logger.list(scripts, true)
+    }
   }
 }
 
