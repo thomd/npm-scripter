@@ -1,6 +1,7 @@
 # npm-scripter
 
 [![Build Status](https://travis-ci.org/thomd/npm-scripter.png)](https://travis-ci.org/thomd/npm-scripter)
+[![Known Vulnerabilities](https://snyk.io/test/github/thomd/npm-scripter/badge.svg)](https://snyk.io/test/github/thomd/npm-scripter)
 
 A simple `npm` helper for the command-line to manage npm-scripts.
 
