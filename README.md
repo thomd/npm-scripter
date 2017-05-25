@@ -6,19 +6,21 @@ A simple `npm` helper for the command-line to manage npm-scripts.
 
 > It's for the lazy programmer because editing json files is terrible.
 
+<img src="https://raw.githubusercontent.com/thomd/npm-scripter/images/screenshot.png">
+
 ## Install
 
 ```shell
 npm install -g npm-scripter
 ```
 
-Create a bash alias if you like with
+If you like, create a bash alias
 
 ```shell
-alias nps='npm-scripter $@'
+alias nps='npm-scripter'
 ```
 
-Get help with
+Get help & examples with
 
 ```shell
 nps -h
@@ -38,25 +40,21 @@ List npm-script `foo` with
 nps foo
 ```
 
-Create a npm-script with
+Create a new npm-script with
 
 ```shell
 nps foo 'echo "bar"'
 ```
 
-The latter creates an entry in `package.json` like this:
+This creates an entry in `package.json` like this:
 
 ```javascript
-{
-  // ...
   "scripts": {
     "foo": "echo \"bar\""
   }
-  // ...
-}
 ```
 
-Edit a npm-script (only the code part) in `$EDITOR` with
+Edit an existing npm-script (only the commands part) in `$EDITOR` with
 
 ```shell
 nps foo -e
