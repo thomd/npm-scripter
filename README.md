@@ -15,12 +15,6 @@ A simple `npm` helper for the command-line to manage npm-scripts.
 npm install -g npm-scripter
 ```
 
-If you like, create a bash alias
-
-```shell
-alias nps='npm-scripter'
-```
-
 Get help & examples with
 
 ```shell

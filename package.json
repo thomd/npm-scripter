@@ -5,7 +5,8 @@
   "version": "0.3.0",
   "main": "index.js",
   "bin": {
-    "npm-scripter": "./bin/npm-scripter.js"
+    "npm-scripter": "./bin/npm-scripter.js",
+    "nps": "./bin/npm-scripter.js"
   },
   "author": {
     "email": "thomduerr@gmail.com",
