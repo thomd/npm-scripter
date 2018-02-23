@@ -22,13 +22,14 @@ cli
   .version(pkg.version)
   .option('-d, --delete', 'delete npm-script')
   .option('-e, --edit', `edit npm-script (the commands part) in ${process.env.EDITOR || '$EDITOR'}`)
+  .option('-r, --rename', 'rename npm-script')
   .arguments('[task] [code]')
   .action((task, code) => {
     action = true
 
     if (code) {
       //
-      // ----- npm-scripter task command -e -------------------------------------------------------
+      // ----- nps --edit task code ---------------------------------------------------------------
       if (cli.edit) {
         const tmpfile = tempfile()
         fs.writeFileSync(tmpfile, code)
@@ -41,11 +42,28 @@ cli
         return
       }
 
-      // ----- npm-scripter task command ----------------------------------------------------------
+      // ----- nps --rename task task2 ------------------------------------------------------------
+      if (cli.rename) {
+        const oldTask = task
+        const newTask = code || task
+        const success = scripter.rename(PKG, oldTask, newTask)
+        if (success) {
+          logger.renamed(oldTask, newTask)
+        } else {
+          if(success === undefined) {
+            logger.sourceMissing(oldTask)
+          } else {
+            logger.targetExist(newTask)
+          }
+        }
+        return
+      }
+
+      // ----- nps task code ----------------------------------------------------------------------
       scripter.add(PKG, task, code)
       logger.added(task)
     } else {
-      // ----- npm-scripter task -d ---------------------------------------------------------------
+      // ----- nps --delete task ------------------------------------------------------------------
       if (cli.delete) {
         if (scripter.remove(PKG, task)) {
           logger.deleted(task)
@@ -55,7 +73,23 @@ cli
         return
       }
 
-      // ----- npm-scripter task -e ---------------------------------------------------------------
+      // ----- nps --rename task ------------------------------------------------------------------
+      if (cli.rename) {
+        scripter.rename(PKG, task)
+        const success = scripter.rename(PKG, task)
+        if (success) {
+          logger.renamed(task, task)
+        } else {
+          if(success === undefined) {
+            logger.sourceMissing(task)
+          } else {
+            logger.targetExist(task)
+          }
+        }
+        return
+      }
+
+      // ----- nps --edit task --------------------------------------------------------------------
       if (cli.edit) {
         const tmpfile = tempfile()
         const script = scripter.list(PKG, task).shift()
@@ -71,7 +105,7 @@ cli
         return
       }
 
-      // ----- npm-scripter task ------------------------------------------------------------------
+      // ----- nps task ---------------------------------------------------------------------------
       const scripts = scripter.list(PKG, task)
       if (scripts.length === 0) {
         logger.notFound(task)
@@ -90,19 +124,23 @@ cli.on('--help', () => {
 
     list all npm-scritps:
 
-      > npm-scripter
+      > nps
 
     create npm-script 'foo':
 
-      > npm-scripter foo 'echo -n "foobar"'
+      > nps foo 'echo -n "foobar"'
 
     create npm-script 'foo' in $EDITOR:
 
-      > npm-scripter foo -e
+      > nps -e foo
 
     delete npm-script 'foo':
 
-      > npm-scripter foo -d
+      > nps -d foo
+
+    rename npm-script 'foo' into 'bar':
+
+      > nps -r foo bar
 `
   console.log(examples)
 })
@@ -111,14 +149,14 @@ cli.parse(process.argv)
 
 if (!action) {
   if (cli.delete) {
-    // ----- npm-scripter -d ----------------------------------------------------------------------
+    // ----- nps --delete -------------------------------------------------------------------------
     if (scripter.remove(PKG)) {
       logger.deleted()
     } else {
       logger.notFound()
     }
   } else {
-    // ----- npm-scripter -------------------------------------------------------------------------
+    // ----- npa ----------------------------------------------------------------------------------
     const scripts = scripter.list(PKG)
     if (scripts.length === 0) {
       logger.notFound()

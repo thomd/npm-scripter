@@ -132,4 +132,41 @@ describe('npm-scripter', () => {
     const scripts = scripter.list(TEST_FILE)
     assert.equal(scripts.length, 0)
   })
+
+  it('should rename a script', () => {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    scripter.rename(TEST_FILE, 'bar', 'bar2')
+    const scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 3)
+    assert.deepEqual(scripts.map(script => script.name), ['foo', 'bar2', 'baz'])
+    assert.equal(scripts.filter(script => script.name === 'bar2').shift().code, 'echo bar')
+  })
+
+  it('should rename a script to itself if no target script is given', () => {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    const success = scripter.rename(TEST_FILE, 'bar')
+    assert.equal(success, true)
+    const scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 3)
+    assert.deepEqual(scripts.map(script => script.name), ['foo', 'bar', 'baz'])
+    assert.equal(scripts.filter(script => script.name === 'bar').shift().code, 'echo bar')
+  })
+
+  it('should not rename a script if source script does not exist', () => {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    const success = scripter.rename(TEST_FILE, 'bar2')
+    assert.equal(success, undefined)
+    const scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 3)
+    assert.deepEqual(scripts.map(script => script.name), ['foo', 'bar', 'baz'])
+  })
+
+  it('should not rename a script if target script does already exist', () => {
+    fs.writeFileSync(TEST_FILE, JSON.stringify(TEST_PKG))
+    const success = scripter.rename(TEST_FILE, 'bar', 'baz')
+    assert.equal(success, false)
+    const scripts = scripter.list(TEST_FILE)
+    assert.equal(scripts.length, 3)
+    assert.deepEqual(scripts.map(script => script.name), ['foo', 'bar', 'baz'])
+  })
 })
