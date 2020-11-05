@@ -33,7 +33,7 @@
     "editor": "^1.0.0",
     "jsonfile": "^3.0.0",
     "tempfile": "^2.0.0",
-    "trim": "0.0.1"
+    "trim": "0.0.3"
   },
   "devDependencies": {
     "mocha": "^3.3.0",
